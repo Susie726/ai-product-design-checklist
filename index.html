@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>从旅行助手类 AI 产品对比，提炼一份 AI 产品设计 Checklist</title>
+  <meta name="description" content="一份面向 AI 产品经理、Agent 产品设计者和垂类智能助手团队的实战型设计清单。" />
+  <style>
+    :root {
+      --bg: #f5f1ea;
+      --paper: rgba(255,255,255,.78);
+      --paper-strong: rgba(255,255,255,.92);
+      --text: #1d140f;
+      --muted: #6f5a4f;
+      --line: rgba(29,20,15,.10);
+      --accent: #9f5f34;
+      --accent-2: #d9b38c;
+      --shadow: 0 10px 40px rgba(46, 29, 19, .10);
+      --radius: 24px;
+      --max: 1240px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, "Songti SC", "Noto Serif CJK SC", serif;
+      background:
+        radial-gradient(circle at top left, rgba(217,179,140,.42), transparent 28%),
+        radial-gradient(circle at top right, rgba(159,95,52,.18), transparent 24%),
+        linear-gradient(180deg, #efe7dc 0%, #f6f2eb 42%, #f4efe8 100%);
+      min-height: 100vh;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .shell {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 24px 20px 56px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), #5b3117);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.4);
+    }
+
+    .hero {
+      padding: 38px;
+      border-radius: 32px;
+      background: linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.88));
+      border: 1px solid rgba(255,255,255,.68);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -100px;
+      top: -80px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(217,179,140,.42), transparent 62%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(159,95,52,.08);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(42px, 7vw, 72px);
+      line-height: .98;
+      margin: 0 0 18px;
+      letter-spacing: -0.04em;
+      max-width: 860px;
+      font-weight: 800;
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.85;
+      max-width: 860px;
+      color: var(--muted);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      background: var(--paper-strong);
+      color: var(--text);
+      box-shadow: 0 4px 16px rgba(46,29,19,.06);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), #7e4723);
+      color: #fff8f0;
+      border-color: transparent;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    aside {
+      position: sticky;
+      top: 20px;
+      align-self: start;
+      padding: 18px;
+      border-radius: var(--radius);
+      background: var(--paper);
+      border: 1px solid rgba(255,255,255,.7);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    .toc-title {
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .toc {
+      display: grid;
+      gap: 6px;
+    }
+
+    .toc a {
+      display: block;
+      padding: 10px 12px;
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.4;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+    }
+
+    .toc a:hover {
+      background: rgba(159,95,52,.08);
+      text-decoration: none;
+    }
+
+    .content {
+      display: grid;
+      gap: 18px;
+    }
+
+    .section {
+      padding: 26px 28px;
+      border-radius: var(--radius);
+      background: var(--paper);
+      border: 1px solid rgba(255,255,255,.76);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .section h3 {
+      margin: 20px 0 10px;
+      font-size: 22px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .section p,
+    .section li,
+    .section blockquote {
+      font-size: 17px;
+      line-height: 1.95;
+      color: #3f3128;
+      margin: 0;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+    }
+
+    .section p + p,
+    .section p + ul,
+    .section ul + p,
+    .section h3 + p,
+    .section h3 + ul,
+    .section blockquote + p,
+    .section ul + h3,
+    .section p + h3 {
+      margin-top: 14px;
+    }
+
+    ul { padding-left: 20px; }
+    li + li { margin-top: 10px; }
+
+    .quote {
+      border-left: 4px solid var(--accent);
+      padding: 14px 18px;
+      background: rgba(159,95,52,.06);
+      border-radius: 16px;
+      color: #2b1f18;
+      font-weight: 600;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .card {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.62);
+      border: 1px solid rgba(29,20,15,.08);
+    }
+
+    .card h4 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.25;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chip {
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(159,95,52,.09);
+      border: 1px solid rgba(159,95,52,.12);
+      font-size: 13px;
+      color: var(--accent);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+      font-weight: 700;
+    }
+
+    .footer {
+      margin-top: 10px;
+      padding: 24px 28px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.92));
+      border: 1px solid rgba(255,255,255,.78);
+      box-shadow: var(--shadow);
+      color: var(--muted);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { position: relative; top: 0; }
+      .grid { grid-template-columns: 1fr; }
+      .hero { padding: 26px; }
+      .section { padding: 22px 20px; }
+      h1 { line-height: 1.02; }
+    }
+
+    @media (max-width: 640px) {
+      .shell { padding: 16px 14px 38px; }
+      .topbar { font-size: 13px; }
+      .hero p, .section p, .section li, .section blockquote { font-size: 16px; }
+      .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand"><span class="brand-mark"></span>AI Product Design Checklist</div>
+      <div>Published on GitHub Pages · Susie726</div>
+    </div>
+
+    <section class="hero">
+      <div class="eyebrow">LONGFORM ANALYSIS · AI PRODUCT DESIGN</div>
+      <h1>从旅行助手类 AI 产品对比，提炼一份 AI 产品设计 Checklist</h1>
+      <p>
+        这不是一份泛泛而谈的“AI 产品方法论”，而是一份从具体竞品观察中抽出来、可以直接拿去做产品评审、方案设计和 Agent 体验优化的结构化清单。
+        核心问题只有一个：<strong>一个 AI 产品，究竟是在聊天，还是在持续理解约束并把任务推到结果？</strong>
+      </p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#summary">先看核心结论</a>
+        <a class="btn" href="https://github.com/Susie726/ai-product-design-checklist" target="_blank" rel="noopener noreferrer">查看 GitHub 仓库</a>
+        <a class="btn" href="./analysis.md" target="_blank" rel="noopener noreferrer">查看 Markdown 原文</a>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside>
+        <div class="toc-title">Table of Contents</div>
+        <nav class="toc">
+          <a href="#summary">01. 核心结论</a>
+          <a href="#background">02. 为什么旅行 AI 是好样本</a>
+          <a href="#types">03. 先分清 AI 产品类型</a>
+          <a href="#checklist">04. AI 产品设计 Checklist</a>
+          <a href="#principles">05. 五条高价值设计原则</a>
+          <a href="#takeaway">06. 一句话总结</a>
+        </nav>
+        <div class="chip-row">
+          <span class="chip">决策型 AI</span>
+          <span class="chip">交易型 AI</span>
+          <span class="chip">执行型 AI</span>
+          <span class="chip">Agent</span>
+        </div>
+      </aside>
+
+      <main class="content">
+        <section class="section" id="summary">
+          <h2>核心结论</h2>
+          <div class="quote">
+            好的 AI 产品，不是“会聊天”，而是“能持续理解用户约束，并把任务一步步推进到结果”。
+          </div>
+          <p>
+            旅行助手类 AI 产品之所以值得研究，是因为它同时容纳了内容种草、复杂决策、实时信息、强交易转化和行前—行中—行后完整链路。也正因为如此，这个垂类里暴露出来的优缺点，几乎都能迁移到更广泛的 Copilot、Agent 和垂类智能产品中。
+          </p>
+          <div class="grid">
+            <div class="card">
+              <h4>如果业务目标是决策支持</h4>
+              <p>产品会长成规划型 AI，更重视内容、解释、偏好理解、多约束规划与用户信任。</p>
+            </div>
+            <div class="card">
+              <h4>如果业务目标是交易转化</h4>
+              <p>产品会长成导购型 AI，更重视商品卡片、优惠信息、路径缩短和点击后的一步成交。</p>
+            </div>
+            <div class="card">
+              <h4>如果业务目标是任务完成</h4>
+              <p>产品就必须走向执行型 AI：需要状态管理、工具调用、异常处理和回退能力。</p>
+            </div>
+            <div class="card">
+              <h4>真正拉开差距的地方</h4>
+              <p>不在于回答有多长，而在于多约束处理、记忆连续性、澄清反问和执行闭环是否真的成立。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="background">
+          <h2>为什么旅行 AI 是一个特别好的研究样本</h2>
+          <p>
+            旅行这个垂类天然复杂：需求模糊、变量多、时效强、链路长。用户在一个任务中往往同时关心时间、预算、地点、偏好、同行人、限制条件、价格波动和实时状态变化。这使得旅行 AI 不可能只做成一个“问一句答一段”的搜索替代品。
+          </p>
+          <p>
+            一个成熟的旅行 AI 往往被迫面对三类难题：第一，如何承接模糊需求并把它结构化；第二，如何在内容与交易之间找到产品平衡；第三，如何在连续多轮的上下文里稳定推进任务。这三类难题，也正是绝大多数 AI 产品最终都会遇到的难题。
+          </p>
+        </section>
+
+        <section class="section" id="types">
+          <h2>先分清楚：你到底在做哪类 AI 产品？</h2>
+          <p>
+            很多 AI 产品失败，不是模型不够强，而是战略定位一开始就模糊。团队既想做内容种草，又想做交易转化，又想做 Agent 执行，又想做陪伴互动，最后所有层都沾了一点，但没有一个层真正成立。
+          </p>
+          <div class="grid">
+            <div class="card">
+              <h4>决策型 AI</h4>
+              <p>核心价值是帮用户想清楚怎么做，承接模糊需求、降低比较成本、支持多轮规划与解释型推荐。</p>
+            </div>
+            <div class="card">
+              <h4>交易型 AI</h4>
+              <p>核心价值是缩短成交路径，降低跳失率，让 AI 变成导购入口而不是泛化问答工具。</p>
+            </div>
+            <div class="card">
+              <h4>执行型 AI</h4>
+              <p>核心价值是把任务真正执行下去，需要稳定的工具调用、状态管理、回退和错误处理机制。</p>
+            </div>
+            <div class="card">
+              <h4>陪伴型 AI</h4>
+              <p>核心价值是长期互动频率、人格感和留存，不是完成任务，而是维持关系与参与度。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="checklist">
+          <h2>AI 产品设计 Checklist</h2>
+          <h3>1. 战略定位</h3>
+          <ul>
+            <li>你做的是决策型、交易型、执行型还是陪伴型 AI？</li>
+            <li>第一核心指标是停留、转化、任务完成、复访还是 GMV？</li>
+            <li>AI 在整个业务链路中扮演什么角色：获客、种草、转化、服务还是履约？</li>
+          </ul>
+
+          <h3>2. 目标用户与任务定义</h3>
+          <ul>
+            <li>目标用户是谁：小白、熟练用户、专业用户，还是企业用户？</li>
+            <li>用户任务是否足够具体，而不是泛泛的“提升效率”？</li>
+            <li>任务是否高频、高价值，或虽低频但足够高痛感？</li>
+          </ul>
+
+          <h3>3. 场景拆分</h3>
+          <ul>
+            <li>产品是否按用户旅程拆阶段，而不是把所有事情都塞进一个入口？</li>
+            <li>是否识别出高频、即时、刚需的子场景？</li>
+            <li>哪些场景应该做成快捷卡片，而不是交给聊天框？</li>
+          </ul>
+
+          <h3>4. 输入设计</h3>
+          <ul>
+            <li>用户是否可以低门槛开始使用，而不需要懂 prompt？</li>
+            <li>是否支持推荐问题、模板任务、语音、图片、文件等输入方式？</li>
+            <li>当信息不足时，AI 是否会主动澄清，而不是乱猜？</li>
+          </ul>
+
+          <h3>5. 状态与记忆</h3>
+          <ul>
+            <li>多轮上下文是否连续？</li>
+            <li>是否能处理“刚才那个”“第一个方案”这类指代？</li>
+            <li>是否同时支持短期上下文记忆与长期偏好沉淀？</li>
+          </ul>
+
+          <h3>6. 智能架构</h3>
+          <ul>
+            <li>是否应该采用主 Agent + 子 Agent + 工具引擎的模式？</li>
+            <li>意图识别和路由是否足够稳定？</li>
+            <li>工具边界是否清晰，异常是否可处理？</li>
+          </ul>
+
+          <h3>7. 输出设计</h3>
+          <ul>
+            <li>输出是否不只是大段文本，而是自然语言解释 + 结构化结果 + 下一步操作？</li>
+            <li>是否支持卡片、列表、富文本、图文、清单、时间线等表现形式？</li>
+            <li>结果是否可编辑、可收藏、可分享、可跳转执行？</li>
+          </ul>
+
+          <h3>8. 修改与迭代体验</h3>
+          <ul>
+            <li>用户拿到答案之后，能否低成本继续修改？</li>
+            <li>是否支持“换一个”“更便宜一些”“只保留亲子友好”的局部调整？</li>
+            <li>是否支持方案比较，而不是每次都重开一轮？</li>
+          </ul>
+
+          <h3>9. 执行闭环</h3>
+          <ul>
+            <li>AI 停在建议层，还是能推动到执行层？</li>
+            <li>能否触发下单、预订、提交、通知、同步等动作？</li>
+            <li>失败时是否有回退，打断后是否可续接？</li>
+          </ul>
+
+          <h3>10. 转人工与熔断</h3>
+          <ul>
+            <li>哪些场景必须转人工？</li>
+            <li>转人工是给路径说明，还是可以直接给入口？</li>
+            <li>上下文是否能透传给人工，避免用户重复描述？</li>
+          </ul>
+
+          <h3>11. 数据时效与可信度</h3>
+          <ul>
+            <li>数据是否有时效校验，能否识别停业、过期和冲突信息？</li>
+            <li>是否展示来源、时间戳、推荐理由与风险提示？</li>
+            <li>不确定时，是否会明确说不确定？</li>
+          </ul>
+
+          <h3>12. 个性化与隐私</h3>
+          <ul>
+            <li>个性化推荐是否真的被用户感知到？</li>
+            <li>是否支持查看、管理、清空历史与关闭个性化？</li>
+            <li>AI 使用声明是否清晰可见？</li>
+          </ul>
+
+          <h3>13. 反馈机制</h3>
+          <ul>
+            <li>用户是否能点赞/点踩并补充结构化反馈？</li>
+            <li>这些反馈是否能进入 prompt、路由、工具与 badcase 优化闭环？</li>
+          </ul>
+
+          <h3>14. 评估标准</h3>
+          <ul>
+            <li>是否建立了覆盖多约束处理、动态调整、指代消解、工具调用成功率的 benchmark？</li>
+            <li>是否有长期维护的 badcase 库？</li>
+            <li>是否同时关注业务指标而不只盯着模型表现？</li>
+          </ul>
+        </section>
+
+        <section class="section" id="principles">
+          <h2>五条高价值设计原则</h2>
+          <div class="grid">
+            <div class="card">
+              <h4>先定业务目标，再定 AI 形态</h4>
+              <p>不是先做一个聊天框，再找业务塞进去，而是先明确 AI 在链路中承担的价值。</p>
+            </div>
+            <div class="card">
+              <h4>高频刚需能力要前置</h4>
+              <p>快捷卡片、快捷任务、可见入口，永远比让用户自己想 prompt 更友好。</p>
+            </div>
+            <div class="card">
+              <h4>结果必须尽量可编辑</h4>
+              <p>生成不是终点，修改成本才决定它能否被持续使用与复用。</p>
+            </div>
+            <div class="card">
+              <h4>专业感来自连续状态与约束处理</h4>
+              <p>多条件、动态调整、指代消解、记忆连续性，这些才是垂类 AI 的硬实力。</p>
+            </div>
+            <div class="card">
+              <h4>优秀 AI 最终都要走向执行闭环</h4>
+              <p>如果只能说、不能做，它更像升级版搜索，而不是真正的智能助手。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="takeaway">
+          <h2>一句话总结</h2>
+          <div class="quote">
+            如果一个 AI 产品同时具备：定位清楚、场景够具体、状态连续、结果可编辑、能推进到执行，这个产品通常就值得认真看。
+          </div>
+          <p>
+            真正优秀的 AI 产品设计，不在于把模型“包装得像人”，而在于把复杂任务拆成用户能感知、系统能承接、业务能闭环的连续过程。用户不需要一个会说话的功能集合，他们需要一个能够稳定推进任务的系统。
+          </p>
+        </section>
+
+        <div class="footer">
+          This page is a polished GitHub Pages version of the longform analysis in this repository. If you want a more productized landing page, visual infographics, or a dedicated Agent / OpenClaw edition, continue from this base.
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
