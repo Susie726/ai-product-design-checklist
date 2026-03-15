@@ -17,6 +17,9 @@
       --accent: #2f6fed;
       --accent-soft: rgba(47,111,237,.10);
       --quote: #f6f8ff;
+      --callout-blue: #f5f9ff;
+      --callout-yellow: #fff9eb;
+      --callout-green: #f3faf5;
       --shadow: 0 8px 24px rgba(16,24,40,.04);
       --max: 1180px;
       --tocw: 260px;
@@ -111,9 +114,7 @@
       color: var(--accent);
       font-weight: 600;
     }
-    main {
-      min-width: 0;
-    }
+    main { min-width: 0; }
     .doc {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -169,6 +170,24 @@
       color: #525762;
       font-weight: 600;
     }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .action-btn {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #39404a;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .action-btn:hover { background: var(--soft); }
     .content {
       padding: 24px 48px 40px;
     }
@@ -204,7 +223,10 @@
     .section h3 + ul,
     .section p + h3,
     .section ul + h3,
-    .section blockquote + p { margin-top: 14px; }
+    .section blockquote + p,
+    .section details + details,
+    .section details + p,
+    .section p + details { margin-top: 14px; }
     ul { margin: 0; padding-left: 22px; }
     li + li { margin-top: 8px; }
     .quote {
@@ -216,6 +238,28 @@
       color: #1f3e7c;
       font-weight: 600;
     }
+    .callout {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      margin: 14px 0;
+    }
+    .callout .icon {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      font-size: 17px;
+    }
+    .callout p { margin: 0; font-size: 15px; line-height: 1.75; }
+    .callout.blue { background: var(--callout-blue); }
+    .callout.yellow { background: var(--callout-yellow); }
+    .callout.green { background: var(--callout-green); }
     .cards {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -256,14 +300,32 @@
       background: var(--soft);
     }
     details.fold summary::-webkit-details-marker { display: none; }
-    details.fold .fold-body {
-      padding: 14px 16px 18px;
-    }
+    details.fold .fold-body { padding: 14px 16px 18px; }
     .footer-note {
       margin-top: 20px;
       color: var(--muted);
       font-size: 14px;
       line-height: 1.8;
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(12px);
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(24,24,27,.92);
+      color: #fff;
+      font-size: 13px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: all .2s ease;
+      z-index: 1001;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
     .backtop {
       position: fixed;
@@ -304,12 +366,14 @@
       .subtitle, .section p, .section li, .section blockquote { font-size: 16px; }
       .section h2 { font-size: 26px; }
       .section h3 { font-size: 18px; }
+      .action-btn { width: 100%; }
     }
   </style>
 </head>
 <body>
   <div class="progress" id="progress"></div>
   <button class="backtop" id="backtop" aria-label="返回顶部">↑</button>
+  <div class="toast" id="toast">已复制</div>
   <div class="shell">
     <div class="topbar">
       <div class="brand"><span class="logo"></span>AI Product Design Checklist</div>
@@ -333,7 +397,7 @@
         <article class="doc">
           <section class="hero">
             <div class="cover-tag">AI Product Analysis · Longform Note</div>
-            <h1>从旅行助手类 AI 产品对比，提炼一份 AI 产品设计 Checklist</h1>
+            <h1 id="page-title">从旅行助手类 AI 产品对比，提炼一份 AI 产品设计 Checklist</h1>
             <p class="subtitle">
               这是一份偏产品经理和 Agent 设计者视角的结构化笔记。不是泛泛谈 AI，而是把一个具体垂类里真正有价值的设计规律抽出来，变成可以直接拿去评审、复盘和做方案的框架。
             </p>
@@ -344,12 +408,20 @@
               <span class="pill">Agent 产品</span>
               <span class="pill">产品设计方法论</span>
             </div>
+            <div class="hero-actions">
+              <button class="action-btn" id="copyLinkBtn">复制页面链接</button>
+              <button class="action-btn" id="copyTitleBtn">复制文章标题</button>
+            </div>
           </section>
 
           <div class="content">
             <section class="section" id="summary">
               <h2>核心结论</h2>
               <div class="quote">好的 AI 产品，不是“会聊天”，而是“能持续理解用户约束，并把任务一步步推进到结果”。</div>
+              <div class="callout blue">
+                <div class="icon">💡</div>
+                <p>看这类 AI 产品时，不要只盯着模型回答质量。更值得看的是：它如何理解约束、如何承接上下文、如何修改结果、以及能不能真正推进任务。</p>
+              </div>
               <p>
                 旅行助手类 AI 是一个特别好的观察样本，因为它同时包含复杂决策、时效信息、内容种草、交易转化和行前—行中—行后完整链路。也因此，它暴露出来的问题和优秀设计，几乎都能迁移到更广义的 AI 助手、Copilot、Agent 和垂类智能产品上。
               </p>
@@ -366,10 +438,14 @@
               <p>
                 旅行不是单轮问答，而是一个带有多重约束的连续任务。用户经常同时关心时间、预算、地点、偏好、同行人、特殊限制、价格变化和实时状态。这种复杂性天然要求产品具备更强的状态管理和决策辅助能力。
               </p>
+              <div class="callout yellow">
+                <div class="icon">🧭</div>
+                <p>旅行 AI 的复杂度，本质上和很多企业 Agent、执行型 Copilot 是相似的：都需要多约束理解、持续状态维护和跨步骤推进。</p>
+              </div>
               <p>
                 一个旅行 AI 如果只能“答问题”，那它最多是搜索增强；但如果它能持续记住你的条件、帮你缩小选择空间、在条件变动后继续调整方案、并最终把任务推进到预订或执行层，它才真正有产品价值。
               </p>
-              <details class="fold">
+              <details class="fold" open>
                 <summary>展开看：为什么这个垂类特别容易暴露产品问题</summary>
                 <div class="fold-body">
                   <ul>
@@ -387,6 +463,10 @@
               <p>
                 很多团队的问题不是模型不够强，而是战略定位一开始就模糊。既想做内容，又想做交易，又想做 Agent，又想做陪伴，结果所有层都沾了一点，但没有一层真正成立。
               </p>
+              <div class="callout green">
+                <div class="icon">✅</div>
+                <p>如果只能先做一件事，那就先把“AI 在业务中扮演什么角色”说清楚。这个问题比“要不要加更多模型能力”更重要。</p>
+              </div>
               <div class="cards">
                 <div class="card"><h4>决策型 AI</h4><p>核心价值是帮用户想清楚怎么做，降低比较成本，承接模糊需求，支持多轮规划与解释型推荐。</p></div>
                 <div class="card"><h4>交易型 AI</h4><p>核心价值是缩短下单路径，降低跳失率，让 AI 变成导购入口而不是泛问答工具。</p></div>
@@ -398,102 +478,158 @@
             <section class="section" id="checklist">
               <h2>AI 产品设计 Checklist</h2>
 
-              <h3>1. 战略定位</h3>
-              <ul>
-                <li>你做的是决策型、交易型、执行型还是陪伴型 AI？</li>
-                <li>第一核心指标是停留、转化、任务完成、复访还是 GMV？</li>
-                <li>AI 在链路中扮演的是获客、种草、转化、服务还是履约？</li>
-              </ul>
+              <details class="fold" open>
+                <summary>1. 战略定位</summary>
+                <div class="fold-body">
+                  <ul>
+                    <li>你做的是决策型、交易型、执行型还是陪伴型 AI？</li>
+                    <li>第一核心指标是停留、转化、任务完成、复访还是 GMV？</li>
+                    <li>AI 在链路中扮演的是获客、种草、转化、服务还是履约？</li>
+                  </ul>
+                </div>
+              </details>
 
-              <h3>2. 目标用户与任务定义</h3>
-              <ul>
-                <li>目标用户是谁：小白、熟练用户、专业用户还是企业用户？</li>
-                <li>用户任务是否足够具体，而不是“提升效率”这种空话？</li>
-                <li>任务是否高频、高价值，或虽低频但足够高痛感？</li>
-              </ul>
+              <details class="fold" open>
+                <summary>2. 目标用户与任务定义</summary>
+                <div class="fold-body">
+                  <ul>
+                    <li>目标用户是谁：小白、熟练用户、专业用户还是企业用户？</li>
+                    <li>用户任务是否足够具体，而不是“提升效率”这种空话？</li>
+                    <li>任务是否高频、高价值，或虽低频但足够高痛感？</li>
+                  </ul>
+                </div>
+              </details>
 
-              <h3>3. 场景拆分</h3>
-              <ul>
-                <li>产品是否按用户旅程拆阶段，而不是只做一个总入口？</li>
-                <li>是否识别出高频、即时、刚需的子场景？</li>
-                <li>哪些场景应该做成快捷卡片，而不是留给聊天框？</li>
-              </ul>
+              <details class="fold" open>
+                <summary>3. 场景拆分</summary>
+                <div class="fold-body">
+                  <ul>
+                    <li>产品是否按用户旅程拆阶段，而不是只做一个总入口？</li>
+                    <li>是否识别出高频、即时、刚需的子场景？</li>
+                    <li>哪些场景应该做成快捷卡片，而不是留给聊天框？</li>
+                  </ul>
+                </div>
+              </details>
 
-              <h3>4. 输入设计</h3>
-              <ul>
-                <li>用户是否可以低门槛开始，而不需要懂 prompt？</li>
-                <li>是否支持推荐问题、模板任务、语音、图片、文件等输入方式？</li>
-                <li>当信息不足时，AI 是否会主动澄清，而不是乱猜？</li>
-              </ul>
+              <details class="fold">
+                <summary>4. 输入设计</summary>
+                <div class="fold-body">
+                  <ul>
+                    <li>用户是否可以低门槛开始，而不需要懂 prompt？</li>
+                    <li>是否支持推荐问题、模板任务、语音、图片、文件等输入方式？</li>
+                    <li>当信息不足时，AI 是否会主动澄清，而不是乱猜？</li>
+                  </ul>
+                </div>
+              </details>
 
-              <h3>5. 状态与记忆</h3>
-              <ul>
-                <li>多轮上下文是否连续？</li>
-                <li>是否能处理“刚才那个”“第一个方案”这类指代？</li>
-                <li>是否同时支持短期记忆与长期偏好沉淀？</li>
-              </ul>
+              <details class="fold">
+                <summary>5. 状态与记忆</summary>
+                <div class="fold-body">
+                  <ul>
+                    <li>多轮上下文是否连续？</li>
+                    <li>是否能处理“刚才那个”“第一个方案”这类指代？</li>
+                    <li>是否同时支持短期记忆与长期偏好沉淀？</li>
+                  </ul>
+                </div>
+              </details>
 
-              <h3>6. 智能架构</h3>
-              <ul>
-                <li>是否应该采用主 Agent + 子 Agent + 工具引擎的模式？</li>
-                <li>意图识别和能力路由是否稳定？</li>
-                <li>工具边界是否清晰，异常是否可处理？</li>
-              </ul>
+              <details class="fold">
+                <summary>6. 智能架构</summary>
+                <div class="fold-body">
+                  <ul>
+                    <li>是否应该采用主 Agent + 子 Agent + 工具引擎的模式？</li>
+                    <li>意图识别和能力路由是否稳定？</li>
+                    <li>工具边界是否清晰，异常是否可处理？</li>
+                  </ul>
+                </div>
+              </details>
 
-              <h3>7. 输出设计</h3>
-              <ul>
-                <li>输出是否不只是大段文本，而是自然语言解释 + 结构化结果 + 下一步操作？</li>
-                <li>是否支持卡片、列表、富文本、图文、清单、时间线等表现形式？</li>
-                <li>结果是否可编辑、可分享、可跳转执行？</li>
-              </ul>
+              <details class="fold">
+                <summary>7. 输出设计</summary>
+                <div class="fold-body">
+                  <ul>
+                    <li>输出是否不只是大段文本，而是自然语言解释 + 结构化结果 + 下一步操作？</li>
+                    <li>是否支持卡片、列表、富文本、图文、清单、时间线等表现形式？</li>
+                    <li>结果是否可编辑、可分享、可跳转执行？</li>
+                  </ul>
+                </div>
+              </details>
 
-              <h3>8. 修改与迭代体验</h3>
-              <ul>
-                <li>用户拿到答案后，能否低成本继续修改？</li>
-                <li>是否支持“换一个”“更便宜一些”“只保留某类偏好”的局部调整？</li>
-                <li>是否支持方案比较，而不是每次都重开一轮？</li>
-              </ul>
+              <details class="fold">
+                <summary>8. 修改与迭代体验</summary>
+                <div class="fold-body">
+                  <ul>
+                    <li>用户拿到答案后，能否低成本继续修改？</li>
+                    <li>是否支持“换一个”“更便宜一些”“只保留某类偏好”的局部调整？</li>
+                    <li>是否支持方案比较，而不是每次都重开一轮？</li>
+                  </ul>
+                </div>
+              </details>
 
-              <h3>9. 执行闭环</h3>
-              <ul>
-                <li>AI 是停在建议层，还是能推动到执行层？</li>
-                <li>能否触发下单、预订、提交、通知、同步等动作？</li>
-                <li>失败时是否有回退，打断后是否可续接？</li>
-              </ul>
+              <details class="fold">
+                <summary>9. 执行闭环</summary>
+                <div class="fold-body">
+                  <ul>
+                    <li>AI 是停在建议层，还是能推动到执行层？</li>
+                    <li>能否触发下单、预订、提交、通知、同步等动作？</li>
+                    <li>失败时是否有回退，打断后是否可续接？</li>
+                  </ul>
+                </div>
+              </details>
 
-              <h3>10. 转人工与熔断</h3>
-              <ul>
-                <li>哪些场景必须转人工？</li>
-                <li>转人工是给路径说明，还是可以直接给入口？</li>
-                <li>上下文是否能透传给人工，避免用户重复描述？</li>
-              </ul>
+              <details class="fold">
+                <summary>10. 转人工与熔断</summary>
+                <div class="fold-body">
+                  <ul>
+                    <li>哪些场景必须转人工？</li>
+                    <li>转人工是给路径说明，还是可以直接给入口？</li>
+                    <li>上下文是否能透传给人工，避免用户重复描述？</li>
+                  </ul>
+                </div>
+              </details>
 
-              <h3>11. 数据时效与可信度</h3>
-              <ul>
-                <li>数据是否有时效校验，能否识别停业、过期和冲突信息？</li>
-                <li>是否展示来源、时间戳、推荐理由与风险提示？</li>
-                <li>不确定时，是否会明确说不确定？</li>
-              </ul>
+              <details class="fold">
+                <summary>11. 数据时效与可信度</summary>
+                <div class="fold-body">
+                  <ul>
+                    <li>数据是否有时效校验，能否识别停业、过期和冲突信息？</li>
+                    <li>是否展示来源、时间戳、推荐理由与风险提示？</li>
+                    <li>不确定时，是否会明确说不确定？</li>
+                  </ul>
+                </div>
+              </details>
 
-              <h3>12. 个性化与隐私</h3>
-              <ul>
-                <li>个性化推荐是否真的被用户感知到？</li>
-                <li>是否支持查看、管理、清空历史与关闭个性化？</li>
-                <li>AI 使用说明是否清晰可见？</li>
-              </ul>
+              <details class="fold">
+                <summary>12. 个性化与隐私</summary>
+                <div class="fold-body">
+                  <ul>
+                    <li>个性化推荐是否真的被用户感知到？</li>
+                    <li>是否支持查看、管理、清空历史与关闭个性化？</li>
+                    <li>AI 使用说明是否清晰可见？</li>
+                  </ul>
+                </div>
+              </details>
 
-              <h3>13. 反馈机制</h3>
-              <ul>
-                <li>用户是否能点赞/点踩并补充结构化反馈？</li>
-                <li>反馈是否真的进入后续优化闭环？</li>
-              </ul>
+              <details class="fold">
+                <summary>13. 反馈机制</summary>
+                <div class="fold-body">
+                  <ul>
+                    <li>用户是否能点赞/点踩并补充结构化反馈？</li>
+                    <li>反馈是否真的进入后续优化闭环？</li>
+                  </ul>
+                </div>
+              </details>
 
-              <h3>14. 评估标准</h3>
-              <ul>
-                <li>是否建立覆盖多约束处理、动态调整、指代消解、工具调用成功率的 benchmark？</li>
-                <li>是否有长期维护的 badcase 库？</li>
-                <li>是否同时关注业务指标，而不只盯着模型表现？</li>
-              </ul>
+              <details class="fold">
+                <summary>14. 评估标准</summary>
+                <div class="fold-body">
+                  <ul>
+                    <li>是否建立覆盖多约束处理、动态调整、指代消解、工具调用成功率的 benchmark？</li>
+                    <li>是否有长期维护的 badcase 库？</li>
+                    <li>是否同时关注业务指标，而不只盯着模型表现？</li>
+                  </ul>
+                </div>
+              </details>
             </section>
 
             <section class="section" id="principles">
@@ -514,7 +650,7 @@
                 真正优秀的 AI 产品设计，不在于把模型“包装得像人”，而在于把复杂任务拆成用户能感知、系统能承接、业务能闭环的连续过程。用户不需要一个会说话的功能集合，他们需要一个能够稳定推进任务的系统。
               </p>
               <p class="footer-note">
-                这版页面已改成更接近 Notion / 知识笔记的阅读形态，并加入了目录高亮、阅读进度和返回顶部等交互。如果你还想更像语雀或 Notion 专栏，我可以继续把 callout、折叠块和多篇文章导航再做得更完整。
+                这版页面已补足更像 Notion 的 3 个细节：callout 提示块、复制链接/标题按钮、以及部分章节默认折叠。若你还要，我可以继续补成更像知识库专栏的多文章导航页。
               </p>
             </section>
           </div>
@@ -528,6 +664,36 @@
     const backtop = document.getElementById('backtop');
     const links = [...document.querySelectorAll('#toc a')];
     const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const toast = document.getElementById('toast');
+
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add('show');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => toast.classList.remove('show'), 1600);
+    }
+
+    async function copyText(text, okText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast(okText || '已复制');
+      } catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        showToast(okText || '已复制');
+      }
+    }
+
+    document.getElementById('copyLinkBtn').addEventListener('click', () => {
+      copyText(location.href, '页面链接已复制');
+    });
+    document.getElementById('copyTitleBtn').addEventListener('click', () => {
+      copyText(document.getElementById('page-title').textContent, '文章标题已复制');
+    });
 
     function onScroll() {
       const scrollTop = window.scrollY;
