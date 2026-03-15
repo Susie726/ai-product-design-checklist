@@ -7,23 +7,26 @@
   <meta name="description" content="把旅行助手类 AI 产品对比，提炼成一组适合分享、适合快速浏览的卡片式研究笔记。" />
   <style>
     :root {
-      --bg: #f4efe8;
-      --paper: #fffdf9;
-      --text: #1f1a17;
-      --muted: #74665d;
-      --line: rgba(31,26,23,.10);
-      --shadow: 0 14px 36px rgba(40, 24, 14, .08);
-      --radius: 24px;
-      --orange: #d97f49;
-      --orange-soft: #fff2e9;
-      --blue: #4a78d9;
-      --blue-soft: #eef4ff;
-      --green: #4f9a72;
-      --green-soft: #eef9f2;
-      --purple: #7a64d8;
-      --purple-soft: #f3efff;
-      --yellow: #b8891b;
-      --yellow-soft: #fff8e7;
+      --bg: #f5f5f7;
+      --panel: rgba(255,255,255,.78);
+      --panel-strong: rgba(255,255,255,.92);
+      --text: #1d1d1f;
+      --muted: #6e6e73;
+      --line: rgba(0,0,0,.08);
+      --shadow: 0 20px 48px rgba(15, 23, 42, .08);
+      --radius: 28px;
+      --blue: #0071e3;
+      --blue-soft: linear-gradient(180deg, rgba(0,113,227,.10), rgba(255,255,255,.88));
+      --orange: #ff7a00;
+      --orange-soft: linear-gradient(180deg, rgba(255,122,0,.10), rgba(255,255,255,.88));
+      --green: #2aa86b;
+      --green-soft: linear-gradient(180deg, rgba(42,168,107,.10), rgba(255,255,255,.88));
+      --purple: #7758ff;
+      --purple-soft: linear-gradient(180deg, rgba(119,88,255,.10), rgba(255,255,255,.88));
+      --yellow: #c48a00;
+      --yellow-soft: linear-gradient(180deg, rgba(196,138,0,.10), rgba(255,255,255,.88));
+      --pink: #e84b8a;
+      --pink-soft: linear-gradient(180deg, rgba(232,75,138,.10), rgba(255,255,255,.88));
       --max: 1320px;
     }
 
@@ -31,11 +34,13 @@
     body {
       margin: 0;
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Inter, "PingFang SC", sans-serif;
       background:
-        radial-gradient(circle at top left, rgba(217,127,73,.14), transparent 22%),
-        radial-gradient(circle at top right, rgba(74,120,217,.10), transparent 20%),
-        linear-gradient(180deg, #f6f1ea 0%, #f4efe8 100%);
+        radial-gradient(circle at top left, rgba(0,113,227,.09), transparent 24%),
+        radial-gradient(circle at top right, rgba(255,122,0,.08), transparent 22%),
+        linear-gradient(180deg, #f7f7f9 0%, #f3f4f6 100%);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
     a { color: inherit; text-decoration: none; }
@@ -67,30 +72,29 @@
     .logo {
       width: 26px;
       height: 26px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #1f1a17, #6e5b4e);
+      border-radius: 9px;
+      background: linear-gradient(135deg, #0a84ff, #5ac8fa);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.46);
     }
 
     .hero {
-      background: linear-gradient(135deg, rgba(255,255,255,.82), rgba(255,253,249,.96));
-      border: 1px solid rgba(255,255,255,.75);
-      border-radius: 34px;
+      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.96));
+      border: 1px solid rgba(255,255,255,.86);
+      border-radius: 36px;
       box-shadow: var(--shadow);
-      padding: 30px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 32px;
       margin-bottom: 18px;
       position: relative;
       overflow: hidden;
     }
 
-    .hero::after {
+    .hero::before {
       content: "";
       position: absolute;
-      right: -70px;
-      top: -70px;
-      width: 240px;
-      height: 240px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(217,127,73,.18), transparent 68%);
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(0,113,227,.12), transparent 26%);
       pointer-events: none;
     }
 
@@ -100,7 +104,8 @@
       gap: 8px;
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(31,26,23,.05);
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(0,0,0,.05);
       color: var(--muted);
       font-size: 12px;
       font-weight: 700;
@@ -112,8 +117,9 @@
       margin: 0 0 12px;
       font-size: clamp(34px, 6vw, 62px);
       line-height: 1.02;
-      letter-spacing: -0.04em;
-      max-width: 960px;
+      letter-spacing: -0.045em;
+      max-width: 980px;
+      font-weight: 800;
     }
 
     .hero-desc {
@@ -132,8 +138,8 @@
     }
 
     .btn {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.88);
+      border: 1px solid rgba(0,0,0,.06);
+      background: rgba(255,255,255,.86);
       border-radius: 999px;
       padding: 11px 15px;
       font-size: 13px;
@@ -141,12 +147,14 @@
       color: #2d2722;
       cursor: pointer;
       box-shadow: 0 6px 18px rgba(40,24,14,.04);
+      backdrop-filter: blur(10px);
     }
 
     .btn.primary {
-      background: linear-gradient(135deg, var(--orange), #b56232);
+      background: linear-gradient(135deg, #0a84ff, #0071e3);
       border-color: transparent;
       color: #fff;
+      box-shadow: 0 10px 24px rgba(0,113,227,.22);
     }
 
     .quick-grid {
@@ -157,21 +165,32 @@
     }
 
     .card {
-      background: var(--paper);
-      border: 1px solid rgba(255,255,255,.74);
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,.88);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       padding: 20px;
       position: relative;
       overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.62);
     }
 
     .card h2,
     .card h3,
     .card h4 {
       margin: 0 0 10px;
-      letter-spacing: -0.02em;
-      line-height: 1.18;
+      letter-spacing: -0.03em;
+      line-height: 1.14;
     }
 
     .card h2 { font-size: 28px; }
@@ -181,7 +200,7 @@
     .card p,
     .card li {
       margin: 0;
-      color: #463d37;
+      color: #414145;
       font-size: 15px;
       line-height: 1.8;
     }
@@ -190,51 +209,64 @@
     .card li + li { margin-top: 8px; }
 
     .hero-card {
-      min-height: 260px;
-      background: linear-gradient(160deg, #fff7f1, #fffdf9 58%);
-      border-color: rgba(217,127,73,.12);
+      min-height: 270px;
+      background: linear-gradient(160deg, rgba(255,255,255,.88), rgba(255,255,255,.98));
+      border-color: rgba(255,255,255,.96);
     }
 
-    .hero-card .badge {
-      display: inline-flex;
-      padding: 7px 10px;
+    .corner-tag {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      padding: 7px 11px;
       border-radius: 999px;
-      background: rgba(217,127,73,.12);
-      color: var(--orange);
       font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 12px;
+      font-weight: 800;
+      letter-spacing: .02em;
+      border: 1px solid rgba(255,255,255,.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 6px 18px rgba(15,23,42,.06);
     }
+
+    .tag-orange { background: rgba(255,122,0,.12); color: var(--orange); }
+    .tag-blue { background: rgba(0,113,227,.12); color: var(--blue); }
+    .tag-green { background: rgba(42,168,107,.12); color: var(--green); }
+    .tag-purple { background: rgba(119,88,255,.12); color: var(--purple); }
+    .tag-yellow { background: rgba(196,138,0,.12); color: var(--yellow); }
+    .tag-pink { background: rgba(232,75,138,.12); color: var(--pink); }
 
     .quote {
       margin-top: 12px;
       padding: 16px 18px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.84);
-      border: 1px solid rgba(217,127,73,.16);
+      border-radius: 18px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0,0,0,.05);
       font-size: 16px;
       font-weight: 700;
       line-height: 1.7;
     }
 
     .kpi {
-      min-height: 260px;
+      min-height: 270px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
     .kpi .num {
-      font-size: 56px;
-      line-height: .95;
+      font-size: 60px;
+      line-height: .92;
       font-weight: 800;
-      letter-spacing: -0.05em;
+      letter-spacing: -0.06em;
     }
 
-    .kpi.blue { background: var(--blue-soft); }
-    .kpi.green { background: var(--green-soft); }
-    .kpi.purple { background: var(--purple-soft); }
-    .kpi.yellow { background: var(--yellow-soft); }
+    .tint-blue { background: var(--blue-soft); }
+    .tint-green { background: var(--green-soft); }
+    .tint-purple { background: var(--purple-soft); }
+    .tint-yellow { background: var(--yellow-soft); }
+    .tint-orange { background: var(--orange-soft); }
+    .tint-pink { background: linear-gradient(180deg, rgba(232,75,138,.10), rgba(255,255,255,.88)); }
 
     .section-title {
       display: flex;
@@ -256,52 +288,51 @@
       font-size: 14px;
     }
 
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-    }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .tone {
-      padding-top: 48px;
-    }
+    .tone { padding-top: 54px; }
     .tone::before {
       content: attr(data-tag);
       position: absolute;
-      top: 18px;
-      left: 18px;
-      padding: 6px 10px;
+      top: 16px;
+      left: 16px;
+      padding: 7px 11px;
       border-radius: 999px;
       font-size: 12px;
-      font-weight: 700;
-      background: rgba(31,26,23,.06);
+      font-weight: 800;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(0,0,0,.04);
       color: var(--muted);
+      box-shadow: 0 6px 18px rgba(15,23,42,.05);
     }
 
-    .check-group {
-      display: grid;
-      gap: 12px;
-    }
-
+    .check-group { display: grid; gap: 12px; }
     .check-item {
-      padding: 14px 16px;
-      border-radius: 18px;
-      background: rgba(255,255,255,.64);
-      border: 1px solid var(--line);
+      padding: 15px 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.58);
+      border: 1px solid rgba(0,0,0,.05);
+      position: relative;
     }
-
-    .check-item h4 { margin-bottom: 8px; }
+    .check-item::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 18px;
+      bottom: 18px;
+      width: 4px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #0a84ff, #5ac8fa);
+    }
+    .check-item h4 { margin-bottom: 8px; padding-left: 10px; }
+    .check-item ul { padding-left: 28px; }
 
     .footer-card {
       margin-top: 18px;
-      background: linear-gradient(135deg, #1f1a17, #362c25);
-      color: #f7efe6;
+      background: linear-gradient(135deg, #0f172a, #1f2937 60%, #25344d 100%);
+      color: #f7faff;
+      border-color: rgba(255,255,255,.10);
     }
 
     .footer-card p,
@@ -318,11 +349,12 @@
     .chip {
       padding: 7px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.16);
       background: rgba(255,255,255,.08);
       color: #fff6ef;
       font-size: 12px;
       font-weight: 700;
+      backdrop-filter: blur(8px);
     }
 
     .toast {
@@ -355,12 +387,13 @@
 
     @media (max-width: 720px) {
       .shell { padding: 16px 12px 40px; }
-      .hero { padding: 22px 18px; border-radius: 26px; }
-      .card { padding: 18px; border-radius: 20px; }
-      h1 { font-size: 34px; }
+      .hero { padding: 22px 18px; border-radius: 28px; }
+      .card { padding: 18px; border-radius: 22px; }
+      h1 { font-size: 36px; }
       .hero-desc { font-size: 16px; }
-      .kpi .num { font-size: 44px; }
+      .kpi .num { font-size: 46px; }
       .btn { width: 100%; }
+      .corner-tag { top: 14px; right: 14px; }
     }
   </style>
 </head>
@@ -369,7 +402,7 @@
   <div class="shell">
     <div class="topbar">
       <div class="brand"><span class="logo"></span>AI Product Design Checklist</div>
-      <div>Card-style research notes · GitHub Pages</div>
+      <div>Apple UI inspired · Card-style research notes</div>
     </div>
 
     <section class="hero">
@@ -386,25 +419,27 @@
     </section>
 
     <section class="quick-grid">
-      <article class="card hero-card">
-        <div class="badge">一句话总判断</div>
+      <article class="card hero-card tint-orange">
+        <span class="corner-tag tag-orange">核心判断</span>
         <h2>好的 AI 产品，不是“会聊天”，而是“能持续理解用户约束，并把任务一步步推进到结果”。</h2>
         <p>旅行助手类 AI 是一个极好的研究样本，因为它同时包含复杂决策、时效信息、内容种草、交易转化和行前—行中—行后完整链路。这个垂类里暴露出来的问题，几乎都能迁移到更广义的 Agent、Copilot 和垂类 AI 产品中。</p>
         <div class="quote">真正拉开差距的，不是答案有多长，而是多约束处理、记忆连续性、澄清反问和执行闭环是否真正成立。</div>
       </article>
 
-      <article class="card kpi blue">
+      <article class="card kpi tint-blue">
+        <span class="corner-tag tag-blue">Step 01</span>
         <div>
-          <h3>第一步先想清楚</h3>
-          <p>你做的是哪类 AI？决策型、交易型、执行型，还是陪伴型？</p>
+          <h3>先想清楚类型</h3>
+          <p>你做的是决策型、交易型、执行型，还是陪伴型 AI？</p>
         </div>
         <div class="num">01</div>
       </article>
 
-      <article class="card kpi green">
+      <article class="card kpi tint-green">
+        <span class="corner-tag tag-green">Step 02</span>
         <div>
-          <h3>真正评估重点</h3>
-          <p>不是“模型像不像人”，而是“任务推进了多少”。</p>
+          <h3>再判断价值</h3>
+          <p>别只看模型像不像人，更要看任务究竟推进了多少。</p>
         </div>
         <div class="num">02</div>
       </article>
@@ -415,19 +450,23 @@
       <p>先分型，再谈交互、能力和商业化。</p>
     </div>
     <section class="grid-2">
-      <article class="card tone" data-tag="决策型 AI">
+      <article class="card tone tint-blue" data-tag="决策型 AI">
+        <span class="corner-tag tag-blue">Decision</span>
         <h3>重点是承接模糊需求</h3>
         <p>这类产品的核心价值不是立刻成交，而是帮用户想清楚怎么做。更看重内容解释、偏好理解、多约束规划和推荐理由。</p>
       </article>
-      <article class="card tone" data-tag="交易型 AI">
+      <article class="card tone tint-orange" data-tag="交易型 AI">
+        <span class="corner-tag tag-orange">Conversion</span>
         <h3>重点是缩短最后一公里转化</h3>
         <p>这类产品本质上是导购型 AI。更看重商品卡片、优惠权益、快速确认和减少跳失，而不是陪用户慢慢讨论。</p>
       </article>
-      <article class="card tone" data-tag="执行型 AI">
+      <article class="card tone tint-green" data-tag="执行型 AI">
+        <span class="corner-tag tag-green">Execution</span>
         <h3>重点是把任务真正跑下去</h3>
         <p>如果目标是执行，那就必须有更强的状态管理、工具调用、回退机制和异常处理能力。</p>
       </article>
-      <article class="card tone" data-tag="陪伴型 AI">
+      <article class="card tone tint-purple" data-tag="陪伴型 AI">
+        <span class="corner-tag tag-purple">Companion</span>
         <h3>重点是互动频率和人格感</h3>
         <p>这类产品不以任务完成率为第一目标，而是看长期关系、参与度、留存和情绪价值。</p>
       </article>
@@ -438,30 +477,12 @@
       <p>因为它把 AI 产品最难的部分都暴露出来了。</p>
     </div>
     <section class="grid-3">
-      <article class="card">
-        <h4>需求天然模糊</h4>
-        <p>用户经常不知道自己真正想去哪、怎么玩、花多少钱，所以产品必须先帮他收敛问题。</p>
-      </article>
-      <article class="card">
-        <h4>约束天然很多</h4>
-        <p>时间、预算、同行人、偏好、地点、距离、交通、特殊限制都会同时影响方案。</p>
-      </article>
-      <article class="card">
-        <h4>时效性天然很强</h4>
-        <p>店铺关停、库存变化、价格变化一旦错，产品体验不是“笨”，而是“危险”。</p>
-      </article>
-      <article class="card">
-        <h4>链路天然完整</h4>
-        <p>从灵感、规划、比较，到执行、售后和复盘，全链路都可能被卷进来。</p>
-      </article>
-      <article class="card">
-        <h4>内容与交易并存</h4>
-        <p>既要种草，又要转化，所以特别适合观察“流量生态”和“交易转化”如何塑形产品。</p>
-      </article>
-      <article class="card">
-        <h4>最能看出连续状态能力</h4>
-        <p>是否记得上下文、是否支持局部修改、是否能处理动态调整，在这里一眼就能看出来。</p>
-      </article>
+      <article class="card tint-blue"><span class="corner-tag tag-blue">研究点</span><h4>需求天然模糊</h4><p>用户经常不知道自己真正想去哪、怎么玩、花多少钱，所以产品必须先帮他收敛问题。</p></article>
+      <article class="card tint-green"><span class="corner-tag tag-green">研究点</span><h4>约束天然很多</h4><p>时间、预算、同行人、偏好、地点、距离、交通、特殊限制都会同时影响方案。</p></article>
+      <article class="card tint-yellow"><span class="corner-tag tag-yellow">研究点</span><h4>时效性天然很强</h4><p>店铺关停、库存变化、价格变化一旦错，产品体验不是“笨”，而是“危险”。</p></article>
+      <article class="card tint-purple"><span class="corner-tag tag-purple">研究点</span><h4>链路天然完整</h4><p>从灵感、规划、比较，到执行、售后和复盘，全链路都可能被卷进来。</p></article>
+      <article class="card tint-pink"><span class="corner-tag tag-pink">研究点</span><h4>内容与交易并存</h4><p>既要种草，又要转化，所以特别适合观察“流量生态”和“交易转化”如何塑形产品。</p></article>
+      <article class="card tint-orange"><span class="corner-tag tag-orange">研究点</span><h4>最能看出连续状态能力</h4><p>是否记得上下文、是否支持局部修改、是否能处理动态调整，在这里一眼就能看出来。</p></article>
     </section>
 
     <div class="section-title">
@@ -469,134 +490,87 @@
       <p>适合拿去做产品评审、方案设计和竞品复盘。</p>
     </div>
     <section class="grid-3">
-      <article class="card check-group">
+      <article class="card tint-blue check-group">
+        <span class="corner-tag tag-blue">Checklist A</span>
         <div class="check-item">
           <h4>1. 战略定位</h4>
-          <ul>
-            <li>AI 属于哪种类型？</li>
-            <li>核心指标是什么？</li>
-            <li>AI 在链路中负责哪一段价值？</li>
-          </ul>
+          <ul><li>AI 属于哪种类型？</li><li>核心指标是什么？</li><li>AI 在链路中负责哪一段价值？</li></ul>
         </div>
         <div class="check-item">
           <h4>2. 用户与任务</h4>
-          <ul>
-            <li>目标用户是谁？</li>
-            <li>用户任务够不够具体？</li>
-            <li>任务是否高频/高价值/高痛感？</li>
-          </ul>
+          <ul><li>目标用户是谁？</li><li>用户任务够不够具体？</li><li>任务是否高频/高价值/高痛感？</li></ul>
         </div>
       </article>
 
-      <article class="card check-group">
+      <article class="card tint-green check-group">
+        <span class="corner-tag tag-green">Checklist B</span>
         <div class="check-item">
           <h4>3. 场景拆分</h4>
-          <ul>
-            <li>是否按旅程拆阶段？</li>
-            <li>高频刚需子场景有哪些？</li>
-            <li>哪些能力该前置成快捷入口？</li>
-          </ul>
+          <ul><li>是否按旅程拆阶段？</li><li>高频刚需子场景有哪些？</li><li>哪些能力该前置成快捷入口？</li></ul>
         </div>
         <div class="check-item">
           <h4>4. 输入设计</h4>
-          <ul>
-            <li>是否低门槛开始？</li>
-            <li>支持哪些输入模态？</li>
-            <li>信息不足时会不会澄清？</li>
-          </ul>
+          <ul><li>是否低门槛开始？</li><li>支持哪些输入模态？</li><li>信息不足时会不会澄清？</li></ul>
         </div>
       </article>
 
-      <article class="card check-group">
+      <article class="card tint-purple check-group">
+        <span class="corner-tag tag-purple">Checklist C</span>
         <div class="check-item">
           <h4>5. 状态与记忆</h4>
-          <ul>
-            <li>上下文是否连续？</li>
-            <li>能否处理指代和动态修改？</li>
-            <li>短期/长期记忆是否都成立？</li>
-          </ul>
+          <ul><li>上下文是否连续？</li><li>能否处理指代和动态修改？</li><li>短期/长期记忆是否都成立？</li></ul>
         </div>
         <div class="check-item">
           <h4>6. 智能架构</h4>
-          <ul>
-            <li>是否需要主 Agent + 子 Agent？</li>
-            <li>能力路由是否稳定？</li>
-            <li>工具边界和异常处理是否明确？</li>
-          </ul>
+          <ul><li>是否需要主 Agent + 子 Agent？</li><li>能力路由是否稳定？</li><li>工具边界和异常处理是否明确？</li></ul>
         </div>
       </article>
 
-      <article class="card check-group">
+      <article class="card tint-orange check-group">
+        <span class="corner-tag tag-orange">Checklist D</span>
         <div class="check-item">
           <h4>7. 输出设计</h4>
-          <ul>
-            <li>结果是否结构化？</li>
-            <li>能否编辑、分享、跳转执行？</li>
-            <li>推荐有没有解释？</li>
-          </ul>
+          <ul><li>结果是否结构化？</li><li>能否编辑、分享、跳转执行？</li><li>推荐有没有解释？</li></ul>
         </div>
         <div class="check-item">
           <h4>8. 修改与迭代</h4>
-          <ul>
-            <li>是否支持局部调整？</li>
-            <li>能否方案比较？</li>
-            <li>会不会每次都重开一轮？</li>
-          </ul>
+          <ul><li>是否支持局部调整？</li><li>能否方案比较？</li><li>会不会每次都重开一轮？</li></ul>
         </div>
       </article>
 
-      <article class="card check-group">
+      <article class="card tint-yellow check-group">
+        <span class="corner-tag tag-yellow">Checklist E</span>
         <div class="check-item">
           <h4>9. 执行闭环</h4>
-          <ul>
-            <li>停在建议层还是推进到执行层？</li>
-            <li>能否触发预订、提交、同步等动作？</li>
-            <li>失败是否可回退？</li>
-          </ul>
+          <ul><li>停在建议层还是推进到执行层？</li><li>能否触发预订、提交、同步等动作？</li><li>失败是否可回退？</li></ul>
         </div>
         <div class="check-item">
           <h4>10. 转人工与熔断</h4>
-          <ul>
-            <li>哪些场景必须转人工？</li>
-            <li>转人工入口是否顺滑？</li>
-            <li>上下文能否透传？</li>
-          </ul>
+          <ul><li>哪些场景必须转人工？</li><li>转人工入口是否顺滑？</li><li>上下文能否透传？</li></ul>
         </div>
       </article>
 
-      <article class="card check-group">
+      <article class="card tint-pink check-group">
+        <span class="corner-tag tag-pink">Checklist F</span>
         <div class="check-item">
           <h4>11. 数据时效与可信度</h4>
-          <ul>
-            <li>能否识别过期与冲突信息？</li>
-            <li>是否展示来源和时间戳？</li>
-            <li>不确定时会不会坦白？</li>
-          </ul>
+          <ul><li>能否识别过期与冲突信息？</li><li>是否展示来源和时间戳？</li><li>不确定时会不会坦白？</li></ul>
         </div>
         <div class="check-item">
           <h4>12. 个性化与隐私</h4>
-          <ul>
-            <li>个性化是否真的被感知到？</li>
-            <li>历史和记忆是否可控？</li>
-            <li>AI 使用说明是否清晰？</li>
-          </ul>
+          <ul><li>个性化是否真的被感知到？</li><li>历史和记忆是否可控？</li><li>AI 使用说明是否清晰？</li></ul>
         </div>
       </article>
 
-      <article class="card check-group">
+      <article class="card tint-blue check-group">
+        <span class="corner-tag tag-blue">Checklist G</span>
         <div class="check-item">
           <h4>13. 反馈机制</h4>
-          <ul>
-            <li>有没有点赞/点踩与结构化反馈？</li>
-            <li>反馈是否进入优化闭环？</li>
-          </ul>
+          <ul><li>有没有点赞/点踩与结构化反馈？</li><li>反馈是否进入优化闭环？</li></ul>
         </div>
         <div class="check-item">
           <h4>14. 评估标准</h4>
-          <ul>
-            <li>有没有 benchmark 和 badcase 库？</li>
-            <li>有没有同时看业务指标？</li>
-          </ul>
+          <ul><li>有没有 benchmark 和 badcase 库？</li><li>有没有同时看业务指标？</li></ul>
         </div>
       </article>
     </section>
@@ -606,42 +580,26 @@
       <p>这 5 条，几乎可以当 AI 产品设计的“高阶常识”。</p>
     </div>
     <section class="grid-2">
-      <article class="card tone" data-tag="原则 1">
-        <h3>先定业务目标，再定 AI 形态</h3>
-        <p>不是先做一个聊天框，再找业务去塞，而是先明确 AI 在链路中的价值和位置。</p>
-      </article>
-      <article class="card tone" data-tag="原则 2">
-        <h3>高频刚需能力要前置</h3>
-        <p>快捷卡片、快捷任务、模板入口，永远比让用户自己写 prompt 更友好。</p>
-      </article>
-      <article class="card tone" data-tag="原则 3">
-        <h3>结果必须尽量可编辑</h3>
-        <p>生成不是终点，修改成本才决定它能否被持续使用与复用。</p>
-      </article>
-      <article class="card tone" data-tag="原则 4">
-        <h3>专业感来自连续状态与约束处理</h3>
-        <p>多条件、动态调整、指代消解和记忆连续性，才是垂类 AI 的硬实力。</p>
-      </article>
-      <article class="card tone" data-tag="原则 5">
-        <h3>优秀 AI 最终都要走向执行闭环</h3>
-        <p>如果只能说、不能做，它更像升级版搜索，而不是真正的智能助手。</p>
-      </article>
-      <article class="card yellow-soft">
-        <h3>最终判断公式</h3>
-        <p>如果一个产品同时具备：定位清楚、场景够具体、状态连续、结果可编辑、能推进到执行，这个产品通常就值得认真看。</p>
-      </article>
+      <article class="card tone tint-blue" data-tag="原则 1"><span class="corner-tag tag-blue">Principle</span><h3>先定业务目标，再定 AI 形态</h3><p>不是先做一个聊天框，再找业务去塞，而是先明确 AI 在链路中的价值和位置。</p></article>
+      <article class="card tone tint-green" data-tag="原则 2"><span class="corner-tag tag-green">Principle</span><h3>高频刚需能力要前置</h3><p>快捷卡片、快捷任务、模板入口，永远比让用户自己写 prompt 更友好。</p></article>
+      <article class="card tone tint-purple" data-tag="原则 3"><span class="corner-tag tag-purple">Principle</span><h3>结果必须尽量可编辑</h3><p>生成不是终点，修改成本才决定它能否被持续使用与复用。</p></article>
+      <article class="card tone tint-orange" data-tag="原则 4"><span class="corner-tag tag-orange">Principle</span><h3>专业感来自连续状态与约束处理</h3><p>多条件、动态调整、指代消解和记忆连续性，才是垂类 AI 的硬实力。</p></article>
+      <article class="card tone tint-pink" data-tag="原则 5"><span class="corner-tag tag-pink">Principle</span><h3>优秀 AI 最终都要走向执行闭环</h3><p>如果只能说、不能做，它更像升级版搜索，而不是真正的智能助手。</p></article>
+      <article class="card tint-yellow"><span class="corner-tag tag-yellow">判断公式</span><h3>最终判断公式</h3><p>如果一个产品同时具备：定位清楚、场景够具体、状态连续、结果可编辑、能推进到执行，这个产品通常就值得认真看。</p></article>
     </section>
 
     <article class="card footer-card">
+      <span class="corner-tag tag-blue">Takeaway</span>
       <h3>最后一句</h3>
       <p>
         真正优秀的 AI 产品设计，不在于把模型“包装得像人”，而在于把复杂任务拆成用户能感知、系统能承接、业务能闭环的连续过程。用户不需要一个会说话的功能集合，他们需要一个能够稳定推进任务的系统。
       </p>
       <div class="chips">
-        <span class="chip">适合朋友圈 / 群聊分享</span>
+        <span class="chip">苹果 UI 风</span>
+        <span class="chip">更鲜明配色</span>
+        <span class="chip">角标标签</span>
         <span class="chip">适合截图传播</span>
         <span class="chip">适合产品评审</span>
-        <span class="chip">适合 Agent 方向延展</span>
       </div>
     </article>
   </div>
